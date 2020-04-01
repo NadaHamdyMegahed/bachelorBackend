@@ -35,43 +35,7 @@ if (err) {
  
 })
 
-//execute query and save result in txt file
-app.post('/execute/',(req,res)=>{
-    var cmd=require('node-cmd');
-const processRef=cmd.get('swipl code.pl');
-let data_line = '';
- 
-var query = req.body.query+"\n";
 
-var zew=`;
-`;
-
-processRef.stdin.write(query);
-
-processRef.stdout.on(
-    'data',
-    function(data) {
-      
-      data_line += ":"+data;
-      if (data_line[data_line.length-1] == '\n') {
-         console.log(data_line);
-               //writing the output in  text file
-fs.writeFile('./result.txt', data_line, err => {
-  if (err) {
-    console.error(err)
-    return
-  }
-})
-    }
-     else{
-  processRef.stdin.write(zew);
-      }
-    }
-  );
-  
-    res.send(query)
-   
-})
 
 //get result of executed query
 app.get('/',(req,res)=>{
@@ -82,6 +46,77 @@ app.get('/',(req,res)=>{
   });
 })
 
+// execute 2
+//execute query and save result in txt file
+app.post('/execute/',(req,res)=>{
+  var cmd=require('node-cmd');
+const processRef=cmd.get('swipl code.pl');
+let data_line = '';
+
+var query = req.body.query+"\n";
+
+var zew=`;
+`;
+
+processRef.stdin.write(query);
+
+processRef.stdout.on(
+  'data',
+  function(data) {
+    
+    data_line += ":"+data;
+    if (data_line[data_line.length-1] == '\n') {
+       console.log(data_line);
+             //writing the output in  text file
+fs.writeFile('./result.txt', data_line, err => {
+if (err) {
+  console.error(err)
+  return
+}
+})
+  }
+   else{
+processRef.stdin.write(zew);
+    }
+  }
+);
+
+  res.send(query)
+ 
+})
+
+
+//execute query and save result in txt file
+app.post('/execute2/',(req,res)=>{
+  var cmd=require('node-cmd');
+const processRef=cmd.get('swipl code.pl');
+let data_line = '';
+
+var query = req.body.query+"\n";
+
+var zew=`;
+`;
+
+processRef.stdin.write(query);
+
+processRef.stdout.on(
+  'data',
+  function(data) {
+    
+    data_line += ":"+data;
+    if (data_line[data_line.length-1] == '\n') {
+      res.send(data_line)
+      console.log(data_line)
+  }
+   else{
+processRef.stdin.write(zew);
+    }
+  }
+);
+
+ 
+   
+})
 
 
 
