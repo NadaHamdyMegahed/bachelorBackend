@@ -88,6 +88,13 @@ processRef.stdin.write(zew);
 
 //execute query and save result in txt file
 app.post('/execute2/',(req,res)=>{
+
+  fs.writeFile('./result.txt', "", err => {
+    if (err) {
+      console.error(err)
+      return
+    }
+    })
   var cmd=require('node-cmd');
 const processRef=cmd.get('swipl code.pl');
 let data_line = '';
@@ -106,8 +113,7 @@ processRef.stdout.on(
     data_line += ":"+data;
     if (data_line[data_line.length-1] == '\n') {
       res.send(data_line)
-      console.log(data_line)
-  }
+  } 
    else{
 processRef.stdin.write(zew);
     }
