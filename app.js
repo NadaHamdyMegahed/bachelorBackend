@@ -24,7 +24,8 @@ app.use(
 //load code to prolog file
 app.post('/load/',(req,res)=>{
 var code = req.body.code;
-fs.writeFile('./code.pl', code, err => {
+
+fs.writeFile('prologFiles/Code.pl', code, err => {
 if (err) {
   console.error(err)
   return
@@ -36,72 +37,25 @@ if (err) {
 })
 
 
-
-//get result of executed query
-app.get('/',(req,res)=>{
-  fs.readFile("result.txt", function(err, buf) {
-    if(err) res.send("error",err);
-    else
-    res.send(buf.toString());
-  });
-})
-
-// execute 2
 //execute query and save result in txt file
 app.post('/execute/',(req,res)=>{
-  var cmd=require('node-cmd');
-const processRef=cmd.get('swipl code.pl');
-let data_line = '';
 
-var query = req.body.query+"\n";
-
-var zew=`;
-`;
-
-processRef.stdin.write(query);
-
-processRef.stdout.on(
-  'data',
-  function(data) {
-    
-    data_line += ":"+data;
-    if (data_line[data_line.length-1] == '\n') {
-       console.log(data_line);
-             //writing the output in  text file
-fs.writeFile('./result.txt', data_line, err => {
-if (err) {
-  console.error(err)
-  return
-}
-})
-  }
-   else{
-processRef.stdin.write(zew);
-    }
-  }
-);
-
-  res.send(query)
- 
-})
-
-
-//execute query and save result in txt file
-app.post('/execute2/',(req,res)=>{
-
-  fs.writeFile('./result.txt', "", err => {
+  fs.writeFile('./queryResult.txt', "The query is not executed try again", err => {
     if (err) {
       console.error(err)
       return
     }
     })
   var cmd=require('node-cmd');
-const processRef=cmd.get('swipl code.pl');
+
+const processRef=cmd.get('swipl prologFiles/main.pl');
 let data_line = '';
 
 var query = req.body.query+"\n";
 
-var zew=`;
+var or=`;
+`;
+var and=`.
 `;
 
 processRef.stdin.write(query);
@@ -109,26 +63,58 @@ processRef.stdin.write(query);
 processRef.stdout.on(
   'data',
   function(data) {
-    
-    data_line += ":"+data;
-    if (data_line[data_line.length-1] == '\n') {
-      res.send(data_line)
+    var x = data.split("\n")
+    data_line += data;
+    if (x.length > 1) {
+   
+      fs.writeFile('./queryResult.txt', data_line, function (err,data) {
+        if (err) {
+          return console.log(err);
+        }
+        
+        
+      }
+      );
   } 
    else{
-processRef.stdin.write(zew);
+     if(data_line.length<=100000){
+processRef.stdin.write(or);
+
+     }
+     else{
+       console.log("exeeds limit")
+
+      processRef.stdin.write(and);
+      alert("this is only part of the solutions as there are too many possible solutions !!")
+        
+     }
     }
   }
 );
 
- 
+res.send("done");
    
 })
 
+//get result of query
+app.get('/getRes/',(req,res)=>{
 
+  fs.readFile("queryResult.txt", function(err, buf) {
+    if(err) res.send("error",err);
+    else{
+    res.send(buf.toString().replace('Content-type: text/html; charset=UTF-8', ''));
+    }
+  });
 
-
+ 
+})
 
 app.listen(8000,()=>{ console.log("listening on 8000") });
+
+
+
+
+
 
 
 
