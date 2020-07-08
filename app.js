@@ -4,6 +4,7 @@ const cors = require("cors");
 const fs = require('fs');
 app.use(express.json());
 var cmd=require('node-cmd');
+const httpN = require("https-localhost")('http://bachelor.ap.ngrok.io')
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -17,6 +18,7 @@ app.use((req, res, next) => {
 });
 app.use(
   cors({
+    origin: true, credentials: true,
     exposedHeaders: "X-Auth-Token"
   })
 );
@@ -67,9 +69,11 @@ processRef.stdout.on(
   'data',
   function(data) {
     var x = data.split("\n")
+    console.log(x)
     data_line += data;
-    if (x.length > 1) {
-   
+    // added x[x.length-1]==='' to show all answers in case of multiple parameters ex: parent(X,Y)
+    if (x.length > 1 && x[x.length-1]==='')  {
+     
       fs.writeFile('./prologFiles/queryResult.txt', data_line, function (err,data) {
         if (err) {
           return console.log(err);
@@ -212,7 +216,7 @@ app.post('/loadCHR/',(req,res)=>{
 
 
 
-app.listen(8000,()=>{ console.log("listening on 8000") });
+app.listen(8000||env.config.Port,()=>{ console.log("listening on 8000") });
 
 
 

@@ -20,6 +20,8 @@
     "cmd-node": "0.0.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "https-localhost": "^4.6.0",
+    "ngrok": "^3.2.7",
     "node-cmd": "^3.0.0"
   }
 }

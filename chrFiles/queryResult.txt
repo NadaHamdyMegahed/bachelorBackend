@@ -1,2 +1,4 @@
-X = kkkk.
+rain,
+weather:wet,
+weather:umbrella.
 

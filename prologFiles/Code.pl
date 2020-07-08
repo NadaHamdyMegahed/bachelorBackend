@@ -1,14 +1,56 @@
 :-module(Code,[]).
-insert(A,[B|C],[B|D]):-A@>B,!,insert(A,C,D).
-insert(A,C,[A|C]).
-sorting([A|B],S):-sorting(B,ST),insert(A,ST,S),visualize(S).
-sorting([],[]).
+% parent(X,Y) means: X is the
+% father or the mother of Y
 
-tran([],0).
-tran([X],0).
-tran([X,Y|T],N2):-
-X<Y,tran([Y|T],N1),
-N2 is N1+1.
-tran([X,Y|T],N2):-
-Y=<X,tran([Y|T],N2).
+parent(alex,julia).
+parent(alex,rosa).
+parent(lina,julia).
+parent(lina,rosa).
+parent(romeo,peter).
+parent(julia,peter).
+parent(rosa,silvia).
+parent(oscar,ida).
+parent(eva,ida).
+parent(eva,bruno).
+parent(peter,bruno).
+parent(peter,georg).
+parent(peter,irma).
+parent(ruth,georg).
+parent(ruth,irma).
+parent(silvia,otto).
+parent(silvia,pascal).
+parent(irma,olga).
+parent(irma,jean).
+parent(otto,olga).
+parent(otto,jean).
+parent(jean,tina).
+parent(marie,tina).
 
+
+% male(X) means:
+% X is a man
+
+male(alex).
+male(romeo).
+male(oscar).
+male(peter).
+male(bruno).
+male(georg).
+male(otto).
+male(pascal).
+male(jean).
+
+
+% husband(X,Y) means:
+% X is the husband of Y
+
+husband(alex,lina).
+husband(romeo,julia).
+husband(oscar,eva).
+husband(peter,ruth).
+husband(otto,irma).
+husband(jean,marie).
+
+
+parent().
+male().
